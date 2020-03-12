@@ -2,38 +2,11 @@
 
 轻量级跨语言领域驱动框架 .NET Core版  
 
----  
-
-[PointCloudCore-DDD](#pointcloudcore-ddd)  
-
-- [1. 简介](#11-简介)  
-- [2. 开始使用](#2-开始使用)  
-- [2.1. NetSocket](#21-netsocket)  
-  - [2.2. AMQP](#22-amqp)  
-  - [2.3. Repository](#23-repository)  
-  - [2.4. RPC](#24-rpc)  
-  - [2.5. DomainCore](#25-domaincore)  
-  - [2.6. A+ES](#26-aes)  
-- [3. 设计思路](#3-设计思路)  
-  - [3.1. NetSocket 设计方案](#31-netsocket-设计方案)  
-    - [3.1.1. NetSocket 设计思想](#311-netsocket-设计思想)  
-    - [3.1.2. NetSocket 代码解析](#312-netsocket-代码解析)  
-  - [3.2. RPC 设计方案](#32-rpc-设计方案)  
-    - [3.2.1. RPC 设计思想](#321-rpc-设计思想)  
-    - [3.2.2. RPC 代码解析](#322-rpc-代码解析)  
-  - [3.3. Repository 设计方案](#33-repository-设计方案)  
-    - [3.3.1. Repository 设计思想](#331-repository-设计思想)  
-    - [3.3.2. Repository 代码解析](#332-repository-代码解析)  
-  - [3.4. Core 设计方案](#34-core-设计方案)  
-    - [3.4.1. Core 设计思想](#341-core-设计思想)  
-    - [3.4.2. Core 代码解析](#342-core-代码解析)  
-  - [3.5. A+ES 设计方案](#35-aes-设计方案)  
-    - [3.5.1. A+ES 设计思路](#351-aes-设计思路)  
-- [4. 结束语](#4-结束语)  
+[toc]  
 
 ---  
 
-## 1. 简介  
+## 简介  
 
 本项目为一套学生用轻量级跨语言领域驱动框架，旨在帮助学生在学习企业级框架的路上指引方向和放缓学习曲线。 因此在编写框架的时候会刻意的仿照当前语言环境下各个工具的使用方式，意在学生在完全掌握企业级工具的使用之前先适应其使用方式并思考其实现的基本原理思想，同时本框架也可以和现有的企业级框架共同使用，二者之间不存在冲突，当充分学习了企业级框架的使用方法后，可以毫无负担的抛弃框架或者通过简单重构的方式来进行过度。  
 
@@ -41,7 +14,7 @@
 
 ---  
 
-## 2. 开始使用  
+## 开始使用  
 
 基础运行环境为：.NET Core 3.1  
 
@@ -63,7 +36,7 @@
 
 ---  
 
-### 2.1. NetSocket  
+### NetSocket  
 
 NetSocket 模块用于**建立 Socket 通讯**，并提供相应的Socket功能，是对 .NET Core 本身的 Socket 机制进行封装与简便性改造。  
 
@@ -126,9 +99,9 @@ Console.WriteLine(test.Text);
 
 NetSocket 模块自带了两种不同的 Send 方法，提供两种不同的需要：  
 
-· ```c# client.Send(test.SystemSerializer);``` 通过自身的 Socket 发送数据。  
+1. ```c# client.Send(test.SystemSerializer);``` 通过自身的 Socket 发送数据。  
 
-· ```c# client.Send(test.SystemSerializer,socket2);``` 通过指定的其他 Socket 发送数据。  
+2. ```c# client.Send(test.SystemSerializer,socket2);``` 通过指定的其他 Socket 发送数据。  
 
 > NetSocket 模块提供的 Send() 方法并不提供序列化方式，但是如果使用了 NetSocket 模块，模块本身提供拓展方法，为对象和字符串提供了序列化和反序列的方法，为 byte[] 提供反序列化方法：  
 >
@@ -147,7 +120,7 @@ NetSocket 模块自带了两种不同的 Send 方法，提供两种不同的需�
 
 ---  
 
-### 2.2. AMQP  
+### AMQP  
 
 AMQP 模块目前只支持 RabbitMQ ，是对 RabbitMQ.Client 的封装。要使用此模块，需要先安装 RabbitMQ 所需要的运行环境与编程环境：  
 
@@ -177,7 +150,7 @@ RabbitMQDemo rabbit = new RabbitMQDemo();
 //绑定交换规则、队列名、路由码
 rabbit.Bind(".NETTest", ".NETTest", "1");
 //发送数据
-rabbit.Send(".NETTest", ".NETTest", "1", Encoding.UTF8.GetBytes("RabbitMQ!"));
+ rabbit.Send(".NETTest", ".NETTest", "1", Encoding.UTF8.GetBytes("RabbitMQ!"));
 ```
 
 正如 RabbitMQ 官方文档所述，接收方式如下：  
@@ -202,7 +175,7 @@ channel.BasicConsume(".NETTest", true, consumer);
 
 ---  
 
-### 2.3. Repository  
+### Repository  
 
 Repository 模块为一套存储库模板，通过对 Repository 的实现和对接口 IRepository 的实现来完成存储库的设计。  
 
@@ -228,7 +201,7 @@ EntityDemo demo = repository.GetEntity(new EntityDemoIdentity(100));
 
 ---  
 
-### 2.4. RPC  
+### RPC  
 
 RPC 模块通过 NetSocket 模块提供的通讯机制完成远程过程调用的服务。RPC 模块同样分为客户端和服务端，除了框架自带的客户端与服务端实现，也可以通过继承核心类与接口的方式自定义 RPC 客户端与服务端的实现。  
 
@@ -264,7 +237,7 @@ string result = proxy.DoFunc<Param, string>("Add", new Param("Demo:", "Test1"));
 
 ---  
 
-### 2.5. DomainCore  
+### DomainCore  
 
 DomainCore 模块正如其名，作为领域的核心模块，主要提供了以下功能：  
 
@@ -355,7 +328,7 @@ Core 模块的功能不单单包含着 IOC 和 DI ，还有对于 RabbitMQ 的�
 
 当然 Core 模块强大的功能作用于 A+ES 模式上才能发挥出领域驱动设计的精髓~  
 
-### 2.6. A+ES  
+### A+ES  
 
 聚合与事件源模式 (Aggregate+Event sourcing)，通过事件源来维护领域实体的聚合状态。因此离不开 实体 (Entity) 与 事件源 (Event store) 这两个模式。  
 
@@ -410,7 +383,7 @@ Core.Resolve<ApplicationService>().DoService();
 
 ---  
 
-## 3. 设计思路  
+## 设计思路  
 
 框架的设计思路在于方便领域驱动的设计与应用程序的基础设施建设，在进行易用性封装的同时，也综合了进阶用法的可能性，因此在传统的工具之上进行不限制封装，使得框架在不妨碍原有的使用方法之上具有更加强大的实用性和易用性，并且能够在传统的 MVC 结构上进行拓展和细分，适用于最为常规的层级架构：  
 
@@ -429,9 +402,9 @@ Core.Resolve<ApplicationService>().DoService();
 
 接下来根据各个模块来说明设计思路与实现方式。  
 
-### 3.1. NetSocket 设计方案  
+### NetSocket 设计方案  
 
-#### 3.1.1. NetSocket 设计思想  
+#### NetSocket 设计思想  
 
 NetSocket 模块核心的功能便是提供基本 Socket 功能，因此在设计上，在原本的 Socket 工具进行封装的基础上还需要平衡使用的难度，因此在提供易用的方法的基础上给予了一定的自由度。  
 
@@ -445,7 +418,7 @@ NetSocket 模块的工作流程如下图所示：
 
 > 发送可以使用模块自带的 Send 方法来发送数据，但是接收时则必须使用 Socket 中的 receive 方法来接收二进制流，并自行将二进制流反序列化。
 
-#### 3.1.2. NetSocket 代码解析  
+#### NetSocket 代码解析  
 
 · **NetSocket 模块的构建**  
 
@@ -523,9 +496,9 @@ Send 方法需要传入一个返回值为 byte[] 类型的函数，因此可以�
 
 ---  
 
-### 3.2. RPC 设计方案  
+### RPC 设计方案  
 
-#### 3.2.1. RPC 设计思想  
+#### RPC 设计思想  
 
 RPC (Remote Procedure Call) 远程过程调用： 旨在通过 Socket 与动态代理的方式，使得调用者就像通过调用本地函数的方式一样，调用远程被调用者的函数。基于 RPC 基本思想，结构设计如下：  
 
@@ -555,7 +528,7 @@ RPC 类图如下所示：
 
 如图所示，RPCProxy 在调用远程函数的时，会阻塞当前线程以等待返回结果，非线程安全，因此需要自己实现对于 RPCProxy 远程调用的并发执行。  
 
-#### 3.2.2. RPC 代码解析  
+#### RPC 代码解析  
 
 在 RPCInvoke 中，对于函数注册函数为一个虚函数，可以通过重写的方式进行自定义注册行为  
 
@@ -578,9 +551,9 @@ fun.DynamicInvoke(obj.Value<JObject>("Params"));
 
 ---  
 
-### 3.3. Repository 设计方案  
+### Repository 设计方案  
 
-#### 3.3.1. Repository 设计思想  
+#### Repository 设计思想  
 
 我们为什么需要 Repository ？ 因为在所有持久对象中，有一小部分必须能够通过基于对象属性搜索的方式来进行全局访问。他们通常是 Entity ，而毫无约束的数据库查询可能会破坏领域对象的封装和聚合，技术基础设施和数据库访问机制的暴露会增加系统的复杂度，并妨碍领域驱动的设计。  
 
@@ -602,7 +575,7 @@ Repository 模式的优点：
 
 > Repository 与 Factory 的区别：Factory 负责处理对象生命周期的开始，而 Repository 帮助管理生命周期的中间和结束。  
 
-#### 3.3.2. Repository 代码解析  
+#### Repository 代码解析  
 
 框架 Repository 里提供了以下的属性：其中实体缓存和生命周期映射需要子类在构造函数中进行实例化。    
 
@@ -635,9 +608,9 @@ run 方法中提供的是简易的 LRU 方法以及对实体生命周期的管�
 
 ---  
 
-### 3.4. Core 设计方案  
+### Core 设计方案  
 
-#### 3.4.1. Core 设计思想  
+#### Core 设计思想  
 
 Core 作为核心，设计思想源于微内核架构。因此在设计之初则加入 IOC 模块实现 DI 功能，同时对功能性应用提供强力的支持。  
 
@@ -676,7 +649,7 @@ Martin Fowler这么说道[^IOC]:
 
 ![Core类图](doc/Core类图.png "Core类图")  
 
-#### 3.4.2. Core 代码解析  
+#### Core 代码解析  
 
 IOC 实现依赖注入有三种方式：  
 
@@ -748,9 +721,9 @@ foreach (var prop in type.GetProperties().Where(p => p.IsDefined(typeof(Property
 
 ---  
 
-### 3.5. A+ES 设计方案  
+### A+ES 设计方案  
 
-#### 3.5.1. A+ES 设计思路  
+#### A+ES 设计思路  
 
 在哪里使用 A+ES 模式？可以将聚合放置领域模型当中，而领域模型又位于应用服务之后。在应用服务运行时，它将加载聚合并获取对应的领域服务来完成完整的业务操作。当应用服务将处理逻辑委派给聚合的业务方法时，聚合方法将发布事件作为输出并通知所有的事件订阅方。[^A+ES]  
 [^A+ES]:Vaughn Vernon, Implementing Domain-Driven Design, 2013  
@@ -769,7 +742,7 @@ A+ES 最实际的优点就是带来了结构的自由性：
 
 当然本框架实现的 A+ES 模式只是简单实现，目的在于帮助学习者了解 A+ES 的原理以及加快对此种模式的理解与掌握。  
 
-## 4. 结束语  
+## 结束语  
 
 关于 Java 端框架在此：[Java实现领域驱动](https://github.com/tiger5331819/qdu-together-userdomain)
 
