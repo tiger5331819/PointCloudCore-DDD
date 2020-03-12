@@ -38,7 +38,7 @@ namespace PointCloudCore.DomainCore.EventCore
         /// <param name="module">实体模型</param>
         /// <param name="expectedVersion">预期版本</param>
         /// <param name="events">事件列表</param>
-        void AppendToStream(EntityModule module, long expectedVersion, ICollection<Event> events);
+        public void AppendToStream(EntityModule module, long expectedVersion, ICollection<Event> events);
         /// <summary>
         /// 加载事件流
         /// </summary>

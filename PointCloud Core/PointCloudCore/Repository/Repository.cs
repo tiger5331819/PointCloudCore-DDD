@@ -45,7 +45,7 @@ namespace PointCloudCore.Repository
         {
                 while (true)
                 {
-                //URL实现
+                //LRU实现
                 KIdentity Maxk = await Task.Run<KIdentity>(() =>
                 {
                     int MaxTTL = 0;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PointCloud_Core.PointCloudCore.DomainCore.Core
+namespace PointCloudCore.DomainCore
 {
     /// <summary>
     /// 框架：IOC容器

@@ -77,6 +77,7 @@ namespace PointCloud_Core
             invoke.Register<Param, string>("ADD", Add);
             //获取RPCProxy
             IRPCProxy proxy = Core.Resolve<IRPCProxy>("RPC");
+            //输入错误的函数名称会报错
             string result = proxy.DoFunc<Param, string>("Add", new Param("Demo:", "Test1"));
             IRPCProxy proxy2 = Core.Resolve<IRPCProxy>("RPC");
             result += "\n";

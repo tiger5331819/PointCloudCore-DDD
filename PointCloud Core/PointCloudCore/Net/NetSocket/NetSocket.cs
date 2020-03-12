@@ -1,11 +1,11 @@
 ﻿using PointCloudCore.DomainCore;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Threading;
-using System.Collections.Concurrent;
 
 namespace PointCloudCore.Net.NetSocket
 {
@@ -28,7 +28,7 @@ namespace PointCloudCore.Net.NetSocket
     /// </summary>
     public class NetSocketCore
     {
-        private readonly Socket Socket = null;
+        protected readonly Socket Socket = null;
         private readonly IPAddress IP;
         private readonly IPEndPoint Point;
         private static uint Bytesize;
@@ -41,7 +41,8 @@ namespace PointCloudCore.Net.NetSocket
         /// <param name="IP">IP</param>
         /// <param name="Point">端口号</param>
         /// <param name="MB">二进制模块大小（MB）</param>
-        public NetSocketCore([Parameter]string IP, [Parameter]int Point, uint MB = 1)
+        public NetSocketCore([Parameter]string IP, [Parameter]int Point, uint MB = 1, AddressFamily addressFamily = AddressFamily.InterNetwork,
+                            SocketType socketType = SocketType.Stream, ProtocolType protocolType = ProtocolType.Tcp)
         {
             this.IP = IPAddress.Parse(IP);
             this.Point = new IPEndPoint(this.IP, Point);
@@ -52,7 +53,7 @@ namespace PointCloudCore.Net.NetSocket
                 Stream 使用传输控制协议 (Tcp) ProtocolType 和 InterNetworkAddressFamily。
                 ProtocolType.Tcp：使用传输控制协议。
             */
-            Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Socket = new Socket(addressFamily, socketType, protocolType);
             SocketsMap = new ConcurrentDictionary<string, Socket>();
             Bytesize = MB * 1024 * 1024;
         }
