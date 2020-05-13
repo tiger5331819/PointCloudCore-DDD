@@ -127,7 +127,6 @@ namespace PointCloud_Core
                  });
 
             });
-            Thread.Sleep(10000);
             return result;
         }
 
